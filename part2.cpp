@@ -10,50 +10,56 @@ using namespace std;
 
 int main()
 {
- size_t Maxsize=80;
- int fd[2],nbytes; 
- char sharedStr[]="Hello, CS442!\n";
- char readbuffer[80];
- pid_t pid;
+	size_t Maxsize=80;
+ 	int fd[2],nbytes; 
+ 	char sharedStr1[]="Your full name";
+	char sharedStr2[]="your department";
+	char sharedStr3[]="add your email address";
+ 	char readbuffer[80];
+	pid_t pid;
 
- if(pipe(fd)<0) exit(1);
+ 	if(pipe(fd)<0) exit(1);
 
- pid = fork();
+ 	pid = fork();
 
- if(pid == 0)
- {
-  cout << "A New Child was created \n";
+	if(pid == 0)
+ 	{
+		cout << "A New Child was created \n";
 
-  for(int i = 0; i < 2; i++) {
-	cout << "TEST: " << i << endl;
-  }
+		for(int i = 0; i < 2; i++) {
+		cout << "TEST: " << i << endl;
+		}
 
- close(fd[0]);
+		close(fd[0]);
 
- write(fd[1], sharedStr, Maxsize);
- exit(0);
+		write(fd[1], sharedStr1, Maxsize);
+		write(fd[1], sharedStr2, Maxsize);
+		write(fd[1], sharedStr3, Maxsize);
+		exit(0);
 
- }
- else if (pid < 0)
- {
-  cout << "No new child was created \n";
-  return 0;
- }
- else
- {
-	wait(0);
-       	close(fd[1]);
+	}
+	else if (pid < 0)
+	{
+		cout << "No new child was created \n";
+		return 0;
+	}
+	else
+	{
+		wait(0);
+       		close(fd[1]);
+		cout << "~in the parent process~" << endl;
+		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
+		cout << readbuffer << endl;
+		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
+		cout << readbuffer << endl;
+		nbytes=read(fd[0], readbuffer, sizeof(readbuffer));
+		cout << readbuffer << endl;
 
-	nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
-	
-	cout << "Readbuffer: " << readbuffer << endl;	
-	
-	
-	cout << "I am the parent :) \n";
+		cout << "Readbuffer: " << readbuffer << endl;
 
 
-  return 0;
- }
+		return 0;
+	}
 
 return 0;
 }
