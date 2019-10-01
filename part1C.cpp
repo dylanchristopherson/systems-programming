@@ -12,36 +12,27 @@ using namespace std;
 int main()
 {
 	size_t Maxsize=80;
- 	int fd[2],nbytes; 
+ 	int fds[2],nbytes; 
  	char sharedStr1[]="Your full name";
 	char sharedStr2[]="your department";
 	char sharedStr3[]="add your email address";
  	char readbuffer[80];
 	pid_t pid;
 
- 	if(pipe(fd)<0) exit(1);
+ 	if(pipe(fds)<0) exit(1);
 
  	pid = fork();
+	
+
 
 	if(pid == 0)
  	{
 		cout << "A New Child was created \n";
+		dup2(fds[1],1);
+		close(fds[0]);
+		
+		cout << "test" << endl;
 
-		// string str;
-		// cin << "Enter something";
-		// getline(cin, str);
-
-		// char * cstr = new char [str.length()+1];
-
-		for(int i = 0; i < 2; i++) {
-		cout << "TEST: " << i << endl;
-		}
-
-		close(fd[0]);
-
-		write(fd[1], sharedStr1, Maxsize);
-		write(fd[1], sharedStr2, Maxsize);
-		write(fd[1], sharedStr3, Maxsize);
 		exit(0);
 
 	}
@@ -54,13 +45,9 @@ int main()
 	{
 		wait(0);
        		close(fd[1]);
-		cout << "~in the parent process~" << endl;
-		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
-		cout << readbuffer << endl;
-		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
-		cout << readbuffer << endl;
-		nbytes=read(fd[0], readbuffer, sizeof(readbuffer));
-		cout << readbuffer << endl;
+		
+		dup2(fds[0],0);
+		cin >> readbuffer;
 
 		cout << "Readbuffer: " << readbuffer << endl;
 
