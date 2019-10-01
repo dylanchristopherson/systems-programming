@@ -1,7 +1,8 @@
-c#include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
+#include <cstring>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <stdlib.h>
@@ -25,6 +26,12 @@ int main()
 	if(pid == 0)
  	{
 		cout << "A New Child was created \n";
+
+		// string str;
+		// cin << "Enter something";
+		// getline(cin, str);
+
+		// char * cstr = new char [str.length()+1];
 
 		for(int i = 0; i < 2; i++) {
 		cout << "TEST: " << i << endl;
