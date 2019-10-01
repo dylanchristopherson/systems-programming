@@ -31,7 +31,9 @@ int main()
 		dup2(fds[1],1);
 		close(fds[0]);
 		
-		cout << "test" << endl;
+		cout << "test1" << endl;
+		cout << "test2" << endl;
+		cout << "test3" << endl;
 
 		exit(0);
 
@@ -44,13 +46,18 @@ int main()
 	else
 	{
 		wait(0);
-       		close(fd[1]);
+       		close(fds[1]);
 		
 		dup2(fds[0],0);
-		cin >> readbuffer;
 
+		cin >> readbuffer;
 		cout << "Readbuffer: " << readbuffer << endl;
 
+		cin >> readbuffer;
+		cout << "Readbuffer: " << readbuffer << endl;
+
+		cin >> readbuffer;
+		cout << "Readbuffer: " << readbuffer << endl;
 
 		return 0;
 	}
