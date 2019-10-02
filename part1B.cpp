@@ -11,7 +11,7 @@ using namespace std;
 int main()
 {
 	size_t Maxsize=80;
- 	int fd[2],nbytes; 
+ 	int fd[2],nbytes;
  	char sharedStr1[]="Your full name";
 	char sharedStr2[]="your department";
 	char sharedStr3[]="add your email address";
@@ -22,20 +22,16 @@ int main()
 
  	pid = fork();
 
-	if(pid == 0)
- 	{
-		cout << "A New Child was created \n";
-
-		for(int i = 0; i < 2; i++) {
-		cout << "TEST: " << i << endl;
-		}
-
-		close(fd[0]);
-
+	if(pid > 0)
+	{
+		cout << "~in parent process~\n";
+		cout << "Writing...\n";
 		write(fd[1], sharedStr1, Maxsize);
 		write(fd[1], sharedStr2, Maxsize);
 		write(fd[1], sharedStr3, Maxsize);
-		exit(0);
+
+		close(fd[1]);
+		wait(0);
 
 	}
 	else if (pid < 0)
@@ -45,9 +41,9 @@ int main()
 	}
 	else
 	{
-		wait(0);
-       		close(fd[1]);
-		cout << "~in the parent process~" << endl;
+
+		cout << "~in the child process~\n";
+
 		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
 		cout << readbuffer << endl;
 		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
@@ -55,7 +51,9 @@ int main()
 		nbytes=read(fd[0], readbuffer, sizeof(readbuffer));
 		cout << readbuffer << endl;
 
-		cout << "Readbuffer: " << readbuffer << endl;
+		close(fd[0]);
+
+		exit(0);
 
 
 		return 0;
