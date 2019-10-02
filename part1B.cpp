@@ -29,13 +29,19 @@ int main()
 		for(int i = 0; i < 2; i++) {
 		cout << "TEST: " << i << endl;
 		}
+		
+		close(fd[1]);
+		cout << "~in the parent process~" << endl;
+		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
+		cout << readbuffer << endl;
+		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
+		cout << readbuffer << endl;
+		nbytes=read(fd[0], readbuffer, sizeof(readbuffer));
+		cout << readbuffer << endl;
 
-		close(fd[0]);
+		cout << "Readbuffer: " << readbuffer << endl;
 
-		write(fd[1], sharedStr1, Maxsize);
-		write(fd[1], sharedStr2, Maxsize);
-		write(fd[1], sharedStr3, Maxsize);
-		exit(0);
+		
 
 	}
 	else if (pid < 0)
@@ -46,16 +52,15 @@ int main()
 	else
 	{
 		wait(0);
-       		close(fd[1]);
-		cout << "~in the parent process~" << endl;
-		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
-		cout << readbuffer << endl;
-		nbytes=read(fd[0], readbuffer,sizeof(readbuffer));
-		cout << readbuffer << endl;
-		nbytes=read(fd[0], readbuffer, sizeof(readbuffer));
-		cout << readbuffer << endl;
+       		
+		
+		
+		close(fd[0]);
 
-		cout << "Readbuffer: " << readbuffer << endl;
+		write(fd[1], sharedStr1, Maxsize);
+		write(fd[1], sharedStr2, Maxsize);
+		write(fd[1], sharedStr3, Maxsize);
+		exit(0);
 
 
 		return 0;
