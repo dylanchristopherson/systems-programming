@@ -11,7 +11,9 @@ using namespace std;
 int main()
 {
 	size_t Maxsize=80;
+
  	int fd[2],nbytes;
+  
  	char sharedStr1[]="Your full name";
 	char sharedStr2[]="your department";
 	char sharedStr3[]="add your email address";
