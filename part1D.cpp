@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <vector>
+#include <sys/wait.h>
+
 
 using namespace std;
 
@@ -38,47 +40,46 @@ int main() {
 		getline(cin,str);
 
 		cstr = new char [str.length()+1];
-		strcpy(cstr, str.c_str());
-
-		string a;
-	        pch = strtok (cstr, " \t\n");
-        
-		a += pch;
-
-		while(pch != NULL) {
-//			printf( " %s\n", pch);
-
-			pch = strtok(NULL, " \t\n");
-			if (pch != NULL) a += pch;
-		}
-	 	const char *C = a.c_str();
-	
+		
 		v.push_back(cstr);
 
-		if (strcmp(C, "pwd") == 0) getPwd();
-		if (strcmp(C, "history") == 0) getHistory(v);
+		if (strcmp(cstr, "pwd") == 0) getPwd();
+		else if (strcmp(cstr, "history") == 0) getHistory(v);
+		else {
+			cout << "Test" << endl;	
+	
+			pid_t  pid;  
+			char * commandString[2];
 
+//			commandString[0]=a.c_str();
+			// Need to use strcpy because c_str returns
+			// a const char, and commandString isn't a
+			// const char
+			strcpy(commandString[0], a.c_str());
+			commandString[1]=NULL;       				
+
+			pid = fork(); 
+     			if (pid == 0) {
+
+		            if (execvp(commandString[0], commandString) < 0) {
+				cout<<"*** ERROR: exec failed\n";     
+				exit(1);
+		            }
+			    cout<<"A New Child was created J \n";
+			 } else if (pid < 0)   { 
+				cout<<"No New Child Was created L\n"; 
+				return 1;
+			}
+			else // must be the parent
+                        {  
+			wait(0);
+		 	cout<<"I am the parent :)\n";   
+			}	 
+		}
 	}
-
 	delete pch;
 	delete[] cstr;
 	return(0);
 }
-/*
-// Part 2
 
-	v.push_back("Test");
-	v.push_back("Hello again");
-	v.push_back("what's up");
-	v.push_back("asdfhahsdf");
-
-	string hist;
-	cout << "How much history would you like to see?";
-	getline(cin, hist);
-
-	cout << "Hist: " << hist << endl;
-	//for (int i = 0; i < hist; i++) {
-	//	cout << "Vector: " << v[i] << endl;
-	//}
-*/
 
