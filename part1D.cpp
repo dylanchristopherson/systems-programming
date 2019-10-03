@@ -27,68 +27,61 @@ void getHistory(vector<string> v) {
 int main() {
 
 	string str;
-
-
+	string a;
 	vector<string> v;
+//	vector<string> tokV;
 
 	char * cstr;
 	char * pch;
 	char *C;
-	string a;
 
 	while(1) {
 		getPwd();
 		cout<<"~> ";
+
+		vector<string> tokV;
 
 		getline(cin,str);
 		v.push_back(str);
 
 		cstr = new char [str.length()+1];
 		
-		
-		
-		cout << cstr<<"-----------------"<<endl;
-		cout << str<<"-----------------"<<endl;
 		cstr=(char *) str.c_str();
 
-
-
-		char * cstr = new char [str.length()+1];
-		strcpy(cstr, str.c_str());
-
-		string a;
-
-		char * pch;
 	        pch = strtok (cstr, " \t\n");
         
 		a += pch;
+		tokV.push_back(pch);
 
 		while(pch != NULL) {
-			printf( " %s\n", pch);
 	
 			pch = strtok(NULL, " \t\n");
-			if (pch != NULL) a += pch;
+			if (pch != NULL) {
+				a += pch;
+				tokV.push_back(pch);
+			}	
 		}
-		const char *C = a.c_str();
-		cout << "Final c_str: " << C << endl;
-
-
-
-
 
 
 		if (strcmp(cstr, "pwd") == 0){ getPwd(); cout<<endl;}
 		else if (strcmp(cstr, "history") == 0) getHistory(v);
 		else {
-			cout << "Test" << endl;	
 	
 			pid_t  pid;  
-			
+			int length = tokV.size();
+			char * commandString[length+1];
+	
+			for (int i = 0; i < length; i++) {
+				commandString[i] = (char *) tokV[i].c_str();
+				cout << "Char test: " << (char *) tokV[i].c_str() << endl;
+			}	
 
-		//commandString[0]=a.c_str();
-			// Need to use strcpy because c_str returns
-			// a const char, and commandString isn't a
-			// const char
+			commandString[length+1] = NULL;
+
+			for (int i = 0; i < length+1; i++) {
+				cout << "comstr: " << commandString[i] << endl;
+			}			
+/*
 //1: tokenize your command (command and arguments)
 //make the following array as large as number of the tokens +1
 char * commandString[2];  //replace 2 with n+1 : n is number of the tokens
@@ -100,7 +93,7 @@ commandString[0]=(char *) command.c_str(); //replace the command with the vector
 			//strcpy(commandString[0],  "ls"); //loop
 
 			commandString[1]=NULL;  // replace 1 with n such that n //is the number of the tokens so the Null will be in the last array element     				
-
+*/
 
 			pid = fork(); 
      			if (pid == 0) {
@@ -118,7 +111,9 @@ commandString[0]=(char *) command.c_str(); //replace the command with the vector
                         {  
 			wait(0);
 		 	cout<<"I am the parent :)\n";   
-			}	 
+			}
+
+			tokV.erase(tokV.begin(), tokV.end());	 
 		}
 	}
 	delete pch;
