@@ -62,25 +62,53 @@ int main() {
 			}	
 		}
 
-
 		if (strcmp(cstr, "pwd") == 0){ getPwd(); cout<<endl;}
 		else if (strcmp(cstr, "history") == 0) getHistory(v);
 		else {
 	
 			pid_t  pid;  
 			int length = tokV.size();
+			cout << "Length: " << length << endl;
 			char * commandString[length+1];
 	
 			for (int i = 0; i < length; i++) {
 				commandString[i] = (char *) tokV[i].c_str();
-				cout << "Char test: " << (char *) tokV[i].c_str() << endl;
-			}	
+				cout << "i: " << i << endl;
+			}
+			commandString[length] = NULL;	
+/*
+			commandString[length+1] = NULL;		
 
-			commandString[length+1] = NULL;
+			char * commandString[2];
+			string command = "ls";
+			commandString[0] = (char *) command.c_str();
+			commandString[1] = NULL;
+*/
+			pid = fork(); 
+     			if (pid == 0) {
 
-			for (int i = 0; i < length+1; i++) {
-				cout << "comstr: " << commandString[i] << endl;
-			}			
+		            if (execvp(commandString[0], commandString) < 0) {
+				cout<<"*** ERROR: exec failed\n";     
+				exit(1);
+		            }
+			    cout<<"A New Child was created J \n";
+			 } else if (pid < 0)   { 
+				cout<<"No New Child Was created L\n"; 
+				return 1;
+			}
+			else { 
+				wait(0);
+			 	// cout<<"I am the parent :)\n";   
+			}
+
+			tokV.erase(tokV.begin(), tokV.end());	 
+		}
+	}
+	delete pch;
+	delete[] cstr;
+	return(0);
+}
+
 /*
 //1: tokenize your command (command and arguments)
 //make the following array as large as number of the tokens +1
@@ -94,31 +122,5 @@ commandString[0]=(char *) command.c_str(); //replace the command with the vector
 
 			commandString[1]=NULL;  // replace 1 with n such that n //is the number of the tokens so the Null will be in the last array element     				
 */
-
-			pid = fork(); 
-     			if (pid == 0) {
-
-		            if (execvp(commandString[0], commandString) < 0) {
-				cout<<"*** ERROR: exec failed\n";     
-				exit(1);
-		            }
-			    cout<<"A New Child was created J \n";
-			 } else if (pid < 0)   { 
-				cout<<"No New Child Was created L\n"; 
-				return 1;
-			}
-			else // must be the parent
-                        {  
-			wait(0);
-		 	cout<<"I am the parent :)\n";   
-			}
-
-			tokV.erase(tokV.begin(), tokV.end());	 
-		}
-	}
-	delete pch;
-	delete[] cstr;
-	return(0);
-}
 
 
