@@ -13,6 +13,8 @@ void getPwd() {
 	size_t Maxsize = 80;
 	char Readbuffer[80];
 
+	
+
 	getcwd(Readbuffer, Maxsize);
 
 	cout << Readbuffer;
@@ -33,6 +35,10 @@ int main() {
 	char * cstr;
 	char * pch;
 	char *C;
+
+	size_t maxsize=80;
+ 	int fds[2],nbytes; 
+ 	char readbuffer[80];
 
 	while(1) {
 		getPwd();
@@ -74,6 +80,48 @@ int main() {
 			}
 			commandString[length] = NULL;
 
+
+			if(strcmp(commandString[1], "|") == 0) {
+				cout << "Pipe found" << endl;
+				pid_t pid;
+
+ 				if(pipe(fds)<0) exit(1);
+			
+ 				pid = fork();
+	
+
+
+				if(pid == 0)
+ 				{
+					//cout << "A New Child was created \n";
+					dup2(fds[1],1);
+					close(fds[0]);
+		
+					if (execvp(commandString[0], commandString) < 0) {
+						cout << input << "  :command not found\n";
+						exit(0);
+					}
+
+					exit(0);
+	
+				}
+				else if (pid < 0)
+				{
+					cout << "No new child was created \n";
+					return 0;
+				}
+				else
+				{
+					wait(0);
+       					close(fds[1]);
+		
+					dup2(fds[0],0);
+
+					execvp(commandString[2], commandString);
+
+					return 0;
+				}
+			}
 			pid = fork();
      			if (pid == 0) {
 
@@ -81,7 +129,7 @@ int main() {
 				cout<< input << " :command not found\n";
 				exit(1);
 		            }
-			    cout<<"A New Child was created J \n";
+
 			 } else if (pid < 0)   {
 				cout<<"No New Child Was created L\n";
 				return 1;
