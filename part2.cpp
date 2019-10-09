@@ -81,6 +81,19 @@ int main() {
 			commandString[length] = NULL;
 
 
+			// Part 4
+			if(strcmp(commandString[1], "<") == 0) {
+
+
+			}
+
+			if (strcmp(commandString[1], ">") == 0)) {
+				
+				execvp(dup2test.txt);			
+
+			}
+			q
+			// Part 5
 			if(strcmp(commandString[1], "|") == 0) {
 				cout << "Pipe found" << endl;
 				pid_t pid;

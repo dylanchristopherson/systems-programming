@@ -16,6 +16,8 @@ using namespace std;
 
 int main()
 {
+
+	// part 5 read from file 
 	int fd = open("dup2test.txt", O_WRONLY | O_APPEND);
 	
 	if (fd < 0) 
