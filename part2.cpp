@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <vector>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 using namespace std;
 
@@ -83,16 +84,113 @@ int main() {
 
 			// Part 4
 			if(strcmp(commandString[1], "<") == 0) {
+					
+				pid_t pid;
+				pid = fork();
+
+				if(pid > 0) {
+					cout << "In parent" << endl;
+					wait(0);
+				}
+				else if (pid < 0) {
+					cout << "No new child was created\n";
+					return 0;
+				}
+
+				else {
+
+					cout << "In child" << endl;
+					// Handles file input
+					int fda = open(commandString[2], O_WRONLY | O_APPEND);
+	
+					if (fda < 0) {
+						cout << "Can not open the file" << endl;
+						exit(1);
+					}		
+	
+					
+					dup2(fda, 1);	// Will redirect standard out to file
+	
+			                if (execvp(commandString[0], commandString) < 0) {
+						cout<< input << " :command not found\n";
+						exit(1);
+                                        }
+
+					
+					dup2(fda, 0);
+
+					close(fda);
+					return(0);
+					}
+
+
 
 
 			}
 
-			if (strcmp(commandString[1], ">") == 0)) {
-				
-				execvp(dup2test.txt);			
+			if (strcmp(commandString[1], ">") == 0) {
+				cout << "Inside of > block" << endl;
+					
 
+				pid_t pid;
+				pid = fork();
+
+				if(pid > 0) {
+					cout << "In parent" << endl;
+					wait(0);
+				}
+				else if (pid < 0) {
+					cout << "No new child was created\n";
+					return 0;
+				}
+
+				else {
+
+					cout << "In child" << endl;
+					// Handles file input
+					int fda = open(commandString[2], O_WRONLY | O_APPEND);
+	
+					if (fda < 0) {
+						cout << "Can not open the file" << endl;
+						exit(1);
+					}		
+	
+					
+					dup2(fda, 1);	// Will redirect standard out to file
+	
+			                if (execvp(commandString[0], commandString) < 0) {
+						cout<< input << " :command not found\n";
+						exit(1);
+                                        }
+
+					
+					dup2(fda, 0);
+
+					close(fda);
+					return(0);
+					}
+
+/*
+					int fda = open(commandString[2], O_WRONLY | O_APPEND);
+					
+					cout << "Do we get to here 1 " << endl;
+					if (fda < 0) {
+						cout << "Can not open the file" << endl;
+						exit(1);
+					}
+
+					int copy_fd = dup(fda);
+					string msg1 = "Test";
+
+					write(copy_fd, (char *)msg1.c_str(), msg1.size());
+
+					dup2(fda, 0);
+					return 0;
+
+				}
+ */  
 			}
-			q
+			
 			// Part 5
 			if(strcmp(commandString[1], "|") == 0) {
 				cout << "Pipe found" << endl;

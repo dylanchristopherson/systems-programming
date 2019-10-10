@@ -1,2 +1,0 @@
-I will be written to the file dup2test.txt
-I am Dylan Christopherson
