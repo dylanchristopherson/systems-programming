@@ -36,6 +36,7 @@ int main() {
 	char * cstr;
 	char * pch;
 	char *C;
+	char * tmp;
 
 	size_t maxsize=80;
  	int fds[2],nbytes; 
@@ -66,6 +67,8 @@ int main() {
 			}
 		}
 
+
+		cout << "Before if statements" << endl;
 		if (strcmp(cstr, "pwd") == 0){ getPwd(); cout<<endl;}
 		else if (strcmp(cstr, "history") == 0) getHistory(v);
 		else {
@@ -81,158 +84,164 @@ int main() {
 			}
 			commandString[length] = NULL;
 
-
+			cout << "Before part 4" << endl;
 			// Part 4
-			if(strcmp(commandString[1], "<") == 0) {
-					
-				pid_t pid;
-				pid = fork();
 
-				if(pid > 0) {
-					cout << "In parent" << endl;
-					wait(0);
-				}
-				else if (pid < 0) {
-					cout << "No new child was created\n";
-					return 0;
-				}
+			if(length > 2) {
+				tmp = commandString[1];
+				if(strcmp(tmp, "<") == 0) {
+					/*	
+					pid_t pid;
+					pid = fork();
 
-				else {
-
-					cout << "In child" << endl;
-					// Handles file input
-					int fda = open(commandString[2], O_WRONLY | O_APPEND);
-	
-					if (fda < 0) {
-						cout << "Can not open the file" << endl;
-						exit(1);
-					}		
-	
-					
-					dup2(fda, 1);	// Will redirect standard out to file
-	
-			                if (execvp(commandString[0], commandString) < 0) {
-						cout<< input << " :command not found\n";
-						exit(1);
-                                        }
-
-					
-					dup2(fda, 0);
-
-					close(fda);
-					return(0);
+					if(pid > 0) {
+						cout << "In parent" << endl;
+						wait(0);
+					}
+					else if (pid < 0) {
+						cout << "No new child was created\n";
+						return 0;
 					}
 
+					else {
 
-
-
-			}
-
-			if (strcmp(commandString[1], ">") == 0) {
-				cout << "Inside of > block" << endl;
-					
-
-				pid_t pid;
-				pid = fork();
-
-				if(pid > 0) {
-					cout << "In parent" << endl;
-					wait(0);
-				}
-				else if (pid < 0) {
-					cout << "No new child was created\n";
-					return 0;
-				}
-
-				else {
-
-					cout << "In child" << endl;
-					// Handles file input
-					int fda = open(commandString[2], O_WRONLY | O_APPEND);
-	
-					if (fda < 0) {
-						cout << "Can not open the file" << endl;
-						exit(1);
-					}		
-	
-					
-					dup2(fda, 1);	// Will redirect standard out to file
-	
-			                if (execvp(commandString[0], commandString) < 0) {
-						cout<< input << " :command not found\n";
-						exit(1);
-                                        }
-
-					
-					dup2(fda, 0);
-
-					close(fda);
-					return(0);
-					}
-
-/*
-					int fda = open(commandString[2], O_WRONLY | O_APPEND);
-					
-					cout << "Do we get to here 1 " << endl;
-					if (fda < 0) {
-						cout << "Can not open the file" << endl;
-						exit(1);
-					}
-
-					int copy_fd = dup(fda);
-					string msg1 = "Test";
-
-					write(copy_fd, (char *)msg1.c_str(), msg1.size());
-
-					dup2(fda, 0);
-					return 0;
-
-				}
- */  
-			}
-			
-			// Part 5
-			if(strcmp(commandString[1], "|") == 0) {
-				cout << "Pipe found" << endl;
-				pid_t pid;
-
- 				if(pipe(fds)<0) exit(1);
-			
- 				pid = fork();
-	
-
-
-				if(pid == 0)
- 				{
-					//cout << "A New Child was created \n";
-					dup2(fds[1],1);
-					close(fds[0]);
+						cout << "In child" << endl;
+						// Handles file input
+						int fda = open(commandString[2], O_WRONLY | O_APPEND);
 		
-					if (execvp(commandString[0], commandString) < 0) {
-						cout << input << "  :command not found\n";
+						if (fda < 0) {
+							cout << "Can not open the file" << endl;
+							exit(1);
+						}		
+		
+						
+						dup2(fda, 1);	// Will redirect standard out to file
+		
+					        if (execvp(commandString[0], commandString) < 0) {
+							cout<< input << " :command not found\n";
+							exit(1);
+		                                }
+
+						
+						dup2(fda, 0);
+
+						close(fda);
+						return(0);
+						}
+
+	*/
+
+
+				}
+
+				cout << "Before > " << endl;
+				if (strcmp(tmp, ">") == 0) {
+					cout << "Inside of > block" << endl;
+						
+
+					// pid_t pid;
+					pid = fork();
+
+					if(pid > 0) {
+						cout << "In parent" << endl;
+						wait(0);
+					}
+					else if (pid < 0) {
+						cout << "No new child was created\n";
+						return 0;
+					}
+
+					else {
+
+						cout << "In child" << endl;
+						// Handles file input
+						int fda = open(commandString[2], O_WRONLY | O_APPEND);
+		
+						if (fda < 0) {
+							cout << "Can not open the file" << endl;
+							exit(1);
+						}		
+		
+						
+						dup2(fda, 1);	// Will redirect standard out to file
+		
+					        if (execvp(commandString[0], commandString) < 0) {
+							cout<< input << " :command not found\n";
+							exit(1);
+		                                }
+
+						dup2(fda, 0);
+
+						close(fda);
+						return(0);
+						}
+
+	/*
+						int fda = open(commandString[2], O_WRONLY | O_APPEND);
+						
+						cout << "Do we get to here 1 " << endl;
+						if (fda < 0) {
+							cout << "Can not open the file" << endl;
+							exit(1);
+						}
+
+						int copy_fd = dup(fda);
+						string msg1 = "Test";
+
+						write(copy_fd, (char *)msg1.c_str(), msg1.size());
+
+						dup2(fda, 0);
+						return 0;
+
+					}
+	 */  
+				}
+				
+				cout << "Before part 5" << endl;
+				// Part 5
+				if(strcmp(tmp, "|") == 0) {
+					cout << "Pipe found" << endl;
+					//pid_t pid2;
+
+	 				if(pipe(fds)<0) exit(1);
+				
+	 				pid = fork();
+		
+
+
+					if(pid == 0)
+	 				{
+						//cout << "A New Child was created \n";
+						dup2(fds[1],1);
+						close(fds[0]);
+			
+						if (execvp(commandString[0], commandString) < 0) {
+							cout << input << "  :command not found\n";
+							exit(0);
+						}
+
 						exit(0);
-					}
-
-					exit(0);
-	
-				}
-				else if (pid < 0)
-				{
-					cout << "No new child was created \n";
-					return 0;
-				}
-				else
-				{
-					wait(0);
-       					close(fds[1]);
 		
-					dup2(fds[0],0);
+					}
+					else if (pid < 0)
+					{
+						cout << "No new child was created \n";
+						return 0;
+					}
+					else
+					{
+						wait(0);
+	       					close(fds[1]);
+			
+						dup2(fds[0],0);
 
-					execvp(commandString[2], commandString);
+						execvp(commandString[2], commandString);
 
-					return 0;
+						return 0;
+					}
 				}
 			}
+			cout << "Right before last exec" << endl;
 			pid = fork();
      			if (pid == 0) {
 
