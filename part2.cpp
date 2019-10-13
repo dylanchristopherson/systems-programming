@@ -26,30 +26,32 @@ void getHistory(vector<string> v) {
 }
 
 int part4(char * c[], string in) {
-	// Could we just use execvp and run a command to print 
+	
 	if(strcmp(c[1], "<") == 0) {
 		char *readbuffer[80];	
 
+
+		
 		int fda = open(c[2], O_RDONLY);
-		dup2(0, fda);
-	
+		dup2(fda, 0);	
+
 		char * commander[3];
 		commander[0] = c[0];
 		commander[1] = c[2];
 		commander[2] = c[3];
 		
-		if (execvp(commander[0], commander) < 0) {
+		if (execvp(commander[0], c) < 0) {
 			cout<< in << " :command not found\n";
 			exit(1);
 	        }
-
-		dup2(0, STDIN_FILENO);
+		
+		dup2(1, fda);
+		
 		close(fda);
 		return(0);
 	}
 
 	if (strcmp(c[1], ">") == 0) {
-		// Will create a new file every time it is called
 		int fda = creat(c[2], O_WRONLY | O_APPEND);
 
 		if (fda < 0) {
@@ -131,9 +133,7 @@ int main() {
  	char readbuffer[80];
 
 	while(1) {
-		//cin.ignore(10000, "\n");
 		
-
 		str = "";
 
 		getPwd();
@@ -152,7 +152,6 @@ int main() {
 	        pch = strtok (cstr, " \t\n");
 		
 		tokV.push_back(pch);
-		cout << "2" << endl;
 		while(pch != NULL) {
 
 			pch = strtok(NULL, " \t\n");
@@ -183,22 +182,26 @@ int main() {
 				myPipe(commandString, input);
 			}
 			
-			pid = fork();
-     			if (pid == 0) {
 
-		            if (execvp(commandString[0], commandString) < 0) {
-				cout<< input << " :command not found\n";
-				exit(1);
-		            }
+			if (length <= 2) {
+				pid = fork();
+	     			if (pid == 0) {
 
-			 } else if (pid < 0)   {
-				return 1;
+				    if (execvp(commandString[0], commandString) < 0) {
+					cout<< input << " :command not found\n";
+					exit(1);
+				    }
+
+				 } else if (pid < 0)   {
+					return 1;
+				}
+				else {
+					wait(0);
+				}
+
+				tokV.erase(tokV.begin(), tokV.end());
 			}
-			else {
-				wait(0);
-			}
 
-			tokV.erase(tokV.begin(), tokV.end());
 		}
 		
 	}
