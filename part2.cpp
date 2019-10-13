@@ -26,53 +26,47 @@ void getHistory(vector<string> v) {
 }
 
 int part4(char * c[], string in) {
-// Part 4
-
-
+	// Could we just use execvp and run a command to print 
 	if(strcmp(c[1], "<") == 0) {
+		char *readbuffer[80];	
 
+		int fda = open(c[2], O_RDONLY);
+		dup2(0, fda);
+	
+		char * commander[3];
+		commander[0] = c[0];
+		commander[1] = c[2];
+		commander[2] = c[3];
+		
+		if (execvp(commander[0], commander) < 0) {
+			cout<< in << " :command not found\n";
+			exit(1);
+	        }
+
+		dup2(0, STDIN_FILENO);
+		close(fda);
+		return(0);
 	}
 
 	if (strcmp(c[1], ">") == 0) {
+		// Will create a new file every time it is called
+		int fda = creat(c[2], O_WRONLY | O_APPEND);
 
-		pid_t  pid;
-		pid = fork();
-
-		if(pid > 0) {
-			wait(0);
+		if (fda < 0) {
+			cout << "Can not open the file" << endl;
+			exit(1);
 		}
-		else if (pid < 0) {
-			return 0;
-		}
+		dup2(fda, 1);
 
-		else {
+		if (execvp(c[0], c) < 0) {
+			cout<< in << " :command not found\n";
+			exit(1);
+                }
 
-			int fda = open(c[2], O_WRONLY | O_APPEND);
-
-			if (fda < 0) {
-				cout << "Can not open the file" << endl;
-				exit(1);
-			}
-
-			dup2(fda, 1);
-
-			if (execvp(c[0], c) < 0) {
-				cout<< in << " :command not found\n";
-				exit(1);
-	                }
-
-			dup2(fda, 0);
-
-			close(fda);
-			return(0);
-			}
+		dup2(fda, 0);
+		close(fda);
+		return(0);
 	}
-	
-	
-
-	
-
-
 } 
 
 int myPipe(char * c[], string in) {
@@ -137,6 +131,11 @@ int main() {
  	char readbuffer[80];
 
 	while(1) {
+		//cin.ignore(10000, "\n");
+		
+
+		str = "";
+
 		getPwd();
 		cout<<"~> ";
 
@@ -149,10 +148,11 @@ int main() {
 		cstr = new char [str.length()+1];
 
 		cstr=(char *) str.c_str();
+		
 	        pch = strtok (cstr, " \t\n");
-
+		
 		tokV.push_back(pch);
-
+		cout << "2" << endl;
 		while(pch != NULL) {
 
 			pch = strtok(NULL, " \t\n");
@@ -163,6 +163,7 @@ int main() {
 
 		if (strcmp(cstr, "pwd") == 0){ getPwd(); cout<<endl;}
 		else if (strcmp(cstr, "history") == 0) getHistory(v);
+		else if (strcmp(cstr, "exit") == 0) exit(1);
 		else {
 
 			pid_t  pid;
@@ -172,8 +173,8 @@ int main() {
 
 			for (int i = 0; i < length; i++) {
 				commandString[i] = (char *) tokV[i].c_str();
-
 			}
+
 			commandString[length] = NULL;
 
 
@@ -199,6 +200,7 @@ int main() {
 
 			tokV.erase(tokV.begin(), tokV.end());
 		}
+		
 	}
 	delete pch;
 	delete[] cstr;
