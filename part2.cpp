@@ -40,28 +40,21 @@ int part4(char * c[], string in) {
 		commander[1] = c[2];
 		commander[2] = c[3];
 		
-		pid_t pid;
-		pid = fork();
-		if (pid == 0) {		
-
-
-			if (execvp(commander[0], c) < 0) {
-				cout<< in << " :command not found\n";
-				exit(1);
-			}
-		}
-		else if (pid < 0) {
-			return 1;
-		}
-		else {
-			wait(0);
-		
-			//dup2(1, fda);
-			dup2(fda,1);
 			
-			close(fda);
-			return(0);
+
+
+		if (execvp(commander[0], c) < 0) {
+			cout<< in << " :command not found\n";
+			exit(1);
 		}
+	
+		
+		//dup2(1, fda);
+		dup2(fda,1);
+		
+		close(fda);
+		return(0);
+		
 	}
 
 	if (strcmp(c[1], ">") == 0) {
