@@ -9,6 +9,16 @@
 
 using namespace std;
 
+void getPwd2() {
+
+	size_t Maxsize = 80;
+	char Readbuffer[80];
+
+	getcwd(Readbuffer, Maxsize);
+
+	printf("\x1B[31m~%s\033[0m",Readbuffer);
+}
+
 void getPwd() {
 
 	size_t Maxsize = 80;
@@ -17,6 +27,8 @@ void getPwd() {
 	getcwd(Readbuffer, Maxsize);
 
 	cout << Readbuffer;
+	
+	
 }
 
 void getHistory(vector<string> v) {
@@ -39,9 +51,6 @@ int part4(char * c[], string in) {
 		commander[0] = c[0];
 		commander[1] = c[2];
 		commander[2] = c[3];
-		
-			
-
 
 		if (execvp(commander[0], c) < 0) {
 			cout<< in << " :command not found\n";
@@ -49,7 +58,7 @@ int part4(char * c[], string in) {
 		}
 	
 		
-		//dup2(1, fda);
+		
 		dup2(fda,1);
 		
 		close(fda);
@@ -110,11 +119,8 @@ int myPipe(char * c[], string in) {
 	{
 		wait(0);
 		close(fds[1]);
-
 		dup2(fds[0],0);
-		cout << "pls" << endl;
 		execvp(c[2], c);
-		cout << "help" << endl;
 		return 0;
 	}
 	
@@ -142,8 +148,11 @@ int main() {
 		
 		str = "";
 
-		getPwd();
-		cout<<"~> ";
+		
+		
+	
+		getPwd2();
+		cout<<"$ ";
 
 		vector<string> tokV;
 
