@@ -1,0 +1,3 @@
+g++ -std=c++11 yourprogram.cpp -lpthread -o yourprogram
+or
+g++ yourprogram.cpp -o yourprogram -lpthread
