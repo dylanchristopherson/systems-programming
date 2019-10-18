@@ -1,19 +1,24 @@
+//Simple program demostrates multiple thread creation
+//Dr. Alnaeli
+//CS442
+
+
 #include <iostream>
 #include <thread>
-
+#include <vector>
 using namespace std;
-
-void greeting(void) {
-	cout << "Hello, CS442 students!\n";
-	cout << "This is a thread " << this_thread::get_id() << endl;
+void runner(int threadNo) {<!-- -->
+	cout << threadNo << ": Hello, CS442 Students!\n";
+	cout << "This is thread " << this_thread::get_id() << endl;
 }
 
-int main(void) {
-	thread myThread(greeting);
+int main(void) {<!-- -->
+	vector <thread> greetingThreads; // a vector of threads
+//	int x = 100;
+	for (int i = 0; i < 5; i++) // creates and starts 5 threads
+		greetingThreads.push_back(thread(runner, (i + 1)));
 
-	myThread.join(); // Needed so program doesn't end before thread
-
-	cout << "by main thread " << this_thread::get_id() << endl;
- 
-	return 0;
-}	
+	for (thread& t : greetingThreads) // loop with a range variable
+		t.join();
+	cout << "\nThis is main thread " << this_thread::get_id() << endl;
+}
