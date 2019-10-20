@@ -1,0 +1,17 @@
+Script started on 2019-09-21 20:51:06-0500
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_2[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_2[00m$ g++ tokens.cpp 
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_2[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_2[00m$ ls
+[0m[01;32ma.out[0m  tokens.cpp  typescript
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_2[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_2[00m$ ./a.out
+Please enter a string 
+asdf fds hello professor	asdf
+ asdf
+ fds
+ hello
+ professor
+ asdf
+Final c_str: asdffdshelloprofessorasdf
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_2[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_2[00m$ exit
+exit
+
+Script done on 2019-09-21 20:51:35-0500

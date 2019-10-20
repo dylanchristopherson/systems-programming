@@ -1,0 +1,27 @@
+Script started on 2019-09-09 16:43:12-0500
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ exitrmdir assignment1ls[Krm assignment1ls[Kcd ..[3Plsmv * ../assignment_1/ls[Kcd assignment1ls[Kmkdir assignment_1ls[Kcd ..[3Plscd assignment1/ls[Kmv substring.* assignment1/ls[Ktouch substring.cppjava[3Pmkdir assignment1ls[Kmkdir assignment1touch substring.java[1Pcpp[Kls[Kmv substring.* assignment1/ls[Kcd assignment1/ls[Kcd ..[3Plsmkdir assignment_1ls[Kcd assignment1ls[Kmv * ../assignment_1/ls[Kcd ..[3Plsrm assignment1ls[Krmdir assignment1exit[K[Kexitrmdir assignment1ls[Krm assignment1ls[Kcd ..[3Plsmv * ../assignment_1/ls[Kcd assignment1ls[Kcd assignment1ls[Kmv * ../assignment_1/ls[Kcd ..[3Plsrm assignment1ls[Krmdir assignment1exit[K[Kjavac substring.java
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ g++ substring.cpp -o substring cpp
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ gcc substring.c -o substring.o ut
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ ls
+dylan_typescript.txt  Substring.class  substring.cpp   [0m[01;32msubstring.out[0m
+substring.c           [01;32msubstringcpp[0m     substring.java
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ java substring[K[K[K[K[K[K[K[K[K[K Substring 
+String one: 
+I like uw-stout
+String two: 
+uw-stout
+FOUND
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ ./substringcpp
+String one: I like uw-stout
+String two: me too
+NOT FOUND 
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ ./substring.out
+Enter a value: 
+I like uw-stout
+Enter another value: 
+uw-stout
+FOUND 
+]0;dylan@dylan-VirtualBox: ~/Documents/assignment_1[01;32mdylan@dylan-VirtualBox[00m:[01;34m~/Documents/assignment_1[00m$ exit
+exit
+
+Script done on 2019-09-09 16:47:32-0500
