@@ -7,12 +7,12 @@
 #include <thread>
 #include <vector>
 using namespace std;
-void runner(int threadNo) {<!-- -->
+void runner(int threadNo) {
 	cout << threadNo << ": Hello, CS442 Students!\n";
 	cout << "This is thread " << this_thread::get_id() << endl;
 }
 
-int main(void) {<!-- -->
+int main(void) {
 	vector <thread> greetingThreads; // a vector of threads
 //	int x = 100;
 	for (int i = 0; i < 5; i++) // creates and starts 5 threads
