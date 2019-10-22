@@ -10,7 +10,7 @@ using namespace std;
 using namespace std::chrono;
 
 
-const unsigned long long int Dim = 10000;
+const unsigned long long int Dim = 1000;
 
 vector<vector<double>> matrixA;
 vector<vector<double>> matrixB;
@@ -30,10 +30,10 @@ void matrices_mult(int index, int upperbound) {
 }
 
 void threaded_mult() {
-	thread thread1(matrices_mult, 0, 2500);
-	thread thread2(matrices_mult, 2500, 5000);
-	thread thread3(matrices_mult, 5000, 7500);
-	thread thread4(matrices_mult, 7500, 10000);
+	thread thread1(matrices_mult, 0, 250);
+	thread thread2(matrices_mult, 250, 500);
+	thread thread3(matrices_mult, 500, 750);
+	thread thread4(matrices_mult, 750, 1000);
  
 	thread1.join();
 	thread2.join();
@@ -82,8 +82,8 @@ int main(int argc, const char* argv[]) {
 
 			for (int i = 0; i < Dim; i++) {
 			    for (int j = 0; j < Dim; j++) {
-				matrixA[i][j] = rand() % 10000;
-				matrixB[i][j] = rand() % 10000;
+				matrixA[i][j] = rand() % 1000000;
+				matrixB[i][j] = rand() % 1000000;
 				
 			    }
 			}
