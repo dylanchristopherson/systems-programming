@@ -17,13 +17,15 @@ vector<vector<double>> matrixB;
 vector<vector<double>> matrixC;
 
 void matrices_mult(int index, int upperbound) {
-	cout << "Thread ID: " << this_thread::get_id() << endl;
-	cout << "Index: " << index << endl;;
-	cout << "Upperbound: " << upperbound << endl << endl;
+	// Matrix calculation help from below link
+	// https://stackoverflow.com/questions/41018065/multiplying-3x3-matrices-in-c
 
 	for (int i = index; i < upperbound; i++ ) {
-		for (int j = index; j < upperbound; j++) {
-			matrixC[i][j] = matrixA[i][j] * matrixB[i][j];
+		for (int j = 0; j < Dim; j++) {
+			for (int u = 0; u < Dim; u++) {
+				matrixC[i][j] += matrixA[i][u] * matrixB[u][j];
+			}			
+			
 		}
 	}
 
@@ -42,9 +44,12 @@ void threaded_mult() {
 }
 
 void sequential_mult() {
-	for (int i = 0; i < Dim; i++) {
+	for (int i = 0; i < Dim; i++ ) {
 		for (int j = 0; j < Dim; j++) {
-			matrixC[i][j] = matrixA[i][j] * matrixB[i][j];
+			for (int u = 0; u < Dim; u++) {
+				matrixC[i][j] += matrixA[i][u] * matrixB[u][j];
+			}			
+			
 		}
 	}
 }
@@ -82,8 +87,8 @@ int main(int argc, const char* argv[]) {
 
 			for (int i = 0; i < Dim; i++) {
 			    for (int j = 0; j < Dim; j++) {
-				matrixA[i][j] = rand() % 1000000;
-				matrixB[i][j] = rand() % 1000000;
+				matrixA[i][j] = rand() % 100000;
+				matrixB[i][j] = rand() % 100000;
 				
 			    }
 			}
@@ -111,8 +116,8 @@ int main(int argc, const char* argv[]) {
 
 			for (int i = 0; i < Dim; i++) {
 			    for (int j = 0; j < Dim; j++) {
-				matrixA[i][j] = rand() % 10000;
-				matrixB[i][j] = rand() % 10000;
+				matrixA[i][j] = rand() % 1000000;
+				matrixB[i][j] = rand() % 1000000;
 				
 			    }
 			}
