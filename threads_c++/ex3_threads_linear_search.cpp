@@ -14,7 +14,7 @@ bool sequential_Search(unsigned long long int key, unsigned long long int upperB
 bool parallel_Search(unsigned long long int key, unsigned long long int from, unsigned long long int to);
 const unsigned long long int Dim = 300000;//--------------------------------------------
 int main()
-{<!-- -->
+{
 	bool found = false;
 	unsigned long long int key = 77771777777;
 	//auto vars need to be initialized.	
@@ -54,24 +54,24 @@ cout << result_threaded << ", took parallel time: " << duration.count() << " mic
 
 } // end of main function
 //-------------------------
-bool sequential_Search(unsigned long long int key, unsigned long long int upperBound) {<!-- -->
+bool sequential_Search(unsigned long long int key, unsigned long long int upperBound) {
 	for (int index = 0; index < matrixA.size(); ++index)
 		if (matrixA[index] == key)
 			return true;
 	return false;
 }// end of sequential_Matrix_Update functionfunction
 //------------------------------------
-bool parallel_Search(unsigned long long int key, unsigned long long int from, unsigned long long int to) {<!-- -->
+bool parallel_Search(unsigned long long int key, unsigned long long int from, unsigned long long int to) {
 	for (int index = from; (index <= to && foundByThread==false); ++index)
 		if (matrixA[index] == key) //found
-		{<!-- -->
+		{
 			foundByThread = true; //let others know
 			return true;
 		}
 	return false; //not found
 }
 //------------------------------------
-void fillVecotr(unsigned long long int upperBound) {<!-- -->
+void fillVecotr(unsigned long long int upperBound) {
 	unsigned long long int count;
 	for (count = 0; count < upperBound; ++count)
 		matrixA.push_back((rand() % 100000000));

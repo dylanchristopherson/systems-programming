@@ -52,6 +52,8 @@ int part4(char * c[], string in) {
 		commander[1] = c[2];
 		commander[2] = c[3];
 
+
+
 		if (execvp(commander[0], c) < 0) {
 			cout<< in << " :command not found\n";
 			exit(1);
@@ -93,6 +95,8 @@ int myPipe(char * c[], string in) {
 	pid_t  pid;
 	
 	if(strcmp(c[1], "|") == 0) {
+
+
 
 		if(pipe(fds)<0) exit(1);
 		pid = fork();
