@@ -1,0 +1,17 @@
+goodbye
+goodbye.cpp
+hello
+hello.cpp
+hello.txt
+less.txt
+part1A.cpp
+part1B.cpp
+part1C.cpp
+part1D.cpp
+part2
+part2.cpp
+part2temp
+part2temp.cpp
+README.md
+temp.txt
+tmp
