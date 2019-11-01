@@ -1,4 +1,7 @@
-total 176
+total 188
+drwxr-xr-x 3 dylan dylan  4096 Nov  1 17:31 .
+drwxr-xr-x 9 dylan dylan  4096 Nov  1 16:50 ..
+-rwx------ 1 dylan dylan     0 Nov  1 17:31 ahh.txt
 -rwxr-xr-x 1 dylan dylan 14021 Nov  1 16:50 goodbye
 -rw-r--r-- 1 dylan dylan   350 Nov  1 16:50 goodbye.cpp
 -rwxr-xr-x 1 dylan dylan  8794 Nov  1 16:50 hello
@@ -10,9 +13,9 @@ total 176
 -rw-r--r-- 1 dylan dylan  1021 Nov  1 16:50 part1C.cpp
 -rw-r--r-- 1 dylan dylan  1634 Nov  1 16:50 part1D.cpp
 -rwxr-xr-x 1 dylan dylan 46952 Nov  1 17:28 part2
--rw-r--r-- 1 dylan dylan  5164 Nov  1 17:28 part2.cpp
+-rw-r--r-- 1 dylan dylan  5164 Nov  1 17:30 part2.cpp
 -rwxr-xr-x 1 dylan dylan 46648 Nov  1 16:50 part2temp
 -rw-r--r-- 1 dylan dylan  3841 Nov  1 16:50 part2temp.cpp
 -rw-r--r-- 1 dylan dylan    60 Nov  1 16:50 README.md
--rwx------ 1 dylan dylan     0 Nov  1 17:29 temp.txt
+-rwx------ 1 dylan dylan   920 Nov  1 17:29 temp.txt
 drwxr-xr-x 2 dylan dylan  4096 Nov  1 16:50 tmp

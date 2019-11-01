@@ -15,8 +15,8 @@ int execvp_func(char * c[], string input);
 void getPwd2();
 void getPwd();
 void getHistory(vector<string> v);
-int part4(char * c[], string in);
-int myPipe(char * c[], string in);
+int part4(char * c[], string in, int index, int length);
+int myPipe(char * c[], string in, int index, int length);
 
 int main() {
 
@@ -31,6 +31,8 @@ int main() {
 	size_t maxsize=80;
  	int fds[2],nbytes;
  	char readbuffer[80];
+
+	bool flag = true;
 
 
 	while(1) {
@@ -78,30 +80,66 @@ int main() {
 
 			commandString[length] = NULL;
 
+		
 
-			if (length > 2) {
-				
-				pid = fork();
-				if(pid == 0) {
-					part4(commandString, input);
-					myPipe(commandString, input);
+			for (int i = 0; i < length; i++) {
+
+				if (strcmp(commandString[i], ">") == 0) {
+					cout << "Test if this works: " << i << endl;
+					flag = false;
+					pid = fork();
+					if(pid == 0) {
+						part4(commandString, input, i, length);
+					}
+					else if (pid < 0) {
+						return 1;
+					}
+					else {
+						wait(0);
+					}
 				}
-				else if (pid < 0) {
-					return 1;
+
+				else if (strcmp(commandString[i], "<") == 0) {
+					cout << "Test if this works: " << i << endl;
+					flag = false;
+					pid = fork();
+					if(pid == 0) {
+						part4(commandString, input, i, length);
+					}
+					else if (pid < 0) {
+						return 1;
+					}
+					else {
+						wait(0);
+					}
 				}
-				else {
-					wait(0);
+
+				else if (strcmp(commandString[i], "|") == 0) {
+					cout << "Test if this works: " << i << endl;
+					flag = false;
+					cout << "Length: " << length;
+					pid = fork();
+					if(pid == 0) {
+						myPipe(commandString, input, i, length);
+					}
+					else if (pid < 0) {
+						return 1;
+					}
+					else {
+						wait(0);
+					}
 				}
-				
+
 			}
-			
 
-			if (length <= 2) {
+
+			if (flag == true) {
 				execvp_func(commandString, input);
 			}
 
 			// Clears tokenized vector
 			tokV.erase(tokV.begin(), tokV.end());
+			flag = true;
 
 		}
 		
@@ -167,29 +205,31 @@ void getHistory(vector<string> v) {
 
 // part4 is called in a fork in main, that's why we don't need to fork when
 // using execvp
-int part4(char * c[], string in) {
+int part4(char * commandString[], string in, int index, int length) {
 	
-	if(strcmp(c[1], "<") == 0) {
+	char * c1[index+1];
+	char * c2[length - index - 1];
+	
+	for (int i = 0; i <= index; i ++) {
+		c1[i] = commandString[i];
+	}
+	c1[index] = NULL;
+
+	for (int i = 0; i < length - index -1; i ++) {
+		c2[i] = commandString[i+ index + 1];
+	}
+
+	if(strcmp(commandString[index], "<") == 0) {
 		char *readbuffer[80];	
 
-
-		
-		int fda = open(c[2], O_RDONLY);
+		int fda = open(c2[0], O_RDONLY);
 		dup2(fda, 0);	
 
-		char * comm[3];
-		comm[0] = c[0];
-		comm[1] = c[2];
-		comm[2] = c[3];
-
-
-
-		if (execvp(comm[0], comm) < 0) {
+		if (execvp(c1[0], c1) < 0) {
 			cout<< in << " :command not found\n";
 			exit(1);
 		}
 	
-		
 		dup2(fda,1);
 		
 		close(fda);
@@ -197,8 +237,8 @@ int part4(char * c[], string in) {
 		
 	}
 
-	if (strcmp(c[1], ">") == 0) {
-		int fda = open(c[2], O_WRONLY | O_CREAT | S_IRWXU, 00700);
+	if (strcmp(commandString[index], ">") == 0) {
+		int fda = open(c2[0], O_WRONLY | O_CREAT | S_IRWXU, 00700);
 
 		if (fda < 0) {
 			cout << "Can not open the file" << endl;
@@ -206,12 +246,7 @@ int part4(char * c[], string in) {
 		}
 		dup2(fda, 1);
 
-
-		char * co[2];
-		co[0] = c[0];
-		co[1] = c[3]; // Null character
-
-		if (execvp(co[0], co) < 0) {
+		if (execvp(c1[0], c1) < 0) {
 			cout<< in << " :command not found\n";
 			exit(1);
                 }
@@ -223,57 +258,60 @@ int part4(char * c[], string in) {
 	return(0);
 } 
 
-
-
 // myPipe is called in a fork in main, that's why we don't need to fork when
 // using execvp
-int myPipe(char * c[], string in) {
+int myPipe(char * commandString[], string in, int index, int length) {
 	// Part 5
+
+
+	char * c1[index+1];
+	char * c2[length - index];
+	
+	for (int i = 0; i <= index; i ++) {
+		c1[i] = commandString[i];
+	}
+	c1[index] = NULL;
+
+	for (int i = 0; i < length - index; i ++) {
+		c2[i] = commandString[i+ index + 1];
+	}
 
 	int fds[2];
 	pid_t  pid;
 	
-	if(strcmp(c[1], "|") == 0) {
+	if(strcmp(commandString[index], "|") == 0) {
 
 		if(pipe(fds)<0) exit(1);
+
 		pid = fork();
 		if(pid == 0) 
 		{
 	
 			dup2(fds[1],1);
 			close(fds[0]);
-		}
 
+			if (execvp(c1[0], c1) < 0)
+			{
+				cout << in << "  :command not found\n";
+				exit(0);
+			}
 
-		char * co[2];
-		co[0] = c[0];
-		co[1] = c[3]; // Null character
-
-		if (execvp(co[0], co) < 0)
-		{
-			cout << in << "  :command not found\n";
 			exit(0);
-		}
-
-		exit(0);
-
-	}
-	else if (pid < 0)
-	{
-		return 0;
-	}
-	else
-	{
-		wait(0);
-		close(fds[1]);
-		dup2(fds[0],0);
-
-		char * com[2];
-		com[0] = c[2];
-		com[1] = c[3]; // Nul character
-
-		execvp(com[0], com);
-		return 0;
-	}
 	
+		}
+		else if (pid < 0)
+		{
+			return 0;
+		}
+		else
+		{
+			wait(0);
+			close(fds[1]);
+			dup2(fds[0],0);
+
+			execvp(c2[0], c2);
+
+			return 0;
+		}
+	}
 }
