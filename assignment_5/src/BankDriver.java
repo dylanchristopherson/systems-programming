@@ -1,10 +1,49 @@
 import java.io.File;
+import java.io.*;
+import java.util.*;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+
+
+class Extended extends Thread {
+	ArrayList<Customer> myList;
+	int start, end;
+	int total = 0;
+	
+	Extended(ArrayList<Customer> _myList_, int _start_, int _end_) {
+		myList = _myList_;
+		start = _start_;
+		end = _end_;
+	}
+	
+	public int getValue() {
+		System.out.println("IN get value");
+		return total;
+	}
+	
+	public void run() {
+	
+	    int count = 0;
+
+	    System.out.println("In run");
+	    
+        for (int i = start; i < end; i++) {
+        	System.out.println("Within loop");
+        	
+        	System.out.println(myList.get(1).getBalance());
+            if (myList.get(i).getBalance() < 1000) {
+                ++count;
+            }
+        }
+        System.out.println("Count: " + count);
+        
+        total = total + count;
+	}
+}
 
 public class BankDriver {
 
@@ -28,7 +67,7 @@ public class BankDriver {
 		int lowBalances = 0;
 		// --Sequential-Run--------------------------------------------------------------
 		long startTime = System.currentTimeMillis();
-		lowBalances = sequentialCounting(custList); // sequential run
+		// lowBalances = sequentialCounting(custList); // sequential run
 		long estimatedTime = System.currentTimeMillis() - startTime;
 		System.out.println("Number of accounts with lss than 1000$ is: " + lowBalances);
 		System.out.println("Sequential run took in miliseconds: " + estimatedTime);
@@ -36,10 +75,41 @@ public class BankDriver {
 		// *******************************************************************************
 		// --Parallel Run-----------------------------------------------------------------
 
+		
+		
+		System.out.println("Start parallel run");
+		long parallelStartTime = System.currentTimeMillis();
+		
+		// 4000000 records were created
+		
+		// 0
+		// 1000000
+		// 2000000
+		// 3000000
+		// 4000000
+		
+	   	Extended e1 = new Extended(custList, 0, 1000000);
+    	Extended e2 = new Extended(custList, 1000000, 2000000);
+    	Extended e3 = new Extended(custList, 2000000, 3000000);
+    	Extended e4 = new Extended(custList, 3000000, 4000000);
+    	
+    	// Extended total = new Extended("DB.txt", 0, 1000000);
+    	
+    	Thread t1 = new Thread(e1);
+    	Thread t2 = new Thread(e2);
+    	Thread t3 = new Thread(e3);
+    	Thread t4 = new Thread(e4);
+		
+    	int finalTotal = e1.getValue() + e2.getValue() + e3.getValue() + e4.getValue();
+    	
+		long parallelEstimatedTime = System.currentTimeMillis() - parallelStartTime;
+		System.out.println("Number of accounts with lss than 1000$ is: " + finalTotal);
+		System.out.println("Sequential run took in miliseconds: " + parallelEstimatedTime);
+		
 		// --End-of-Parallel-Run----------------------------------------------------------
 
 	}// end of main
-
+	
 	static int sequentialCounting(ArrayList<Customer> myList) {
 		int count = 0;
 		for (int i = 0; i < myList.size(); ++i)
@@ -75,3 +145,5 @@ public class BankDriver {
 	}
 
 }
+
+
