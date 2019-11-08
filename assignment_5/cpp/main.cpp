@@ -1,107 +1,120 @@
 #include <string>
-
 #include <iostream>
 #include <fstream>
-
+#include <chrono>
+#include <vector>
+#include <omp.h>
 
 using namespace std;
+using namespace std::chrono;
+
+// void sequential(vector<Customer> cl);
+// void parallel(vector<Customer> cl);
 
 class Customer {
-	public:
-		string id;
-		double balance;
-	
-		Customer() {
-			id = "";
-			balance = 0.0;
-		}
+public:
+	string id;
+	double balance;
 
-		Customer(string ID, double BALANCE) {
-			id = ID;
-			balance = BALANCE;
-		} 
+	Customer() {
+		id = "";
+		balance = 0.0;
+	}
 
-		void setID(string ID) {
-			id = ID;
-		}
+	Customer(string ID, double BALANCE) {
+		id = ID;
+		balance = BALANCE;
+	}
 
-		void setBalance(double BALANCE) {
-			balance = BALANCE;
-		}
+	void setID(string ID) {
+		id = ID;
+	}
 
-		string getID() {
-			return id;
-		}
+	void setBalance(double BALANCE) {
+		balance = BALANCE;
+	}
 
-		double getBalance() {
-			return balance;
-		}
-			
+	string getID() {
+		return id;
+	}
+
+	double getBalance() {
+		return balance;
+	}
 };
 
-int main () {
+int main() {
+	cout << "Beginning program\n";
 
-	// There are 8000000 lines in the file, that means there
-	// are 4000000 customers
-
-	Customer custList[4000];
-
-	int time = 0;
-	cout << "Hello world\n";
-
+	vector<Customer> custList;
+	
 	Customer john("JOHNNY", 10000.0);
 
-	cout << "John id: " << john.getID() << endl;
-	cout << "John balance: " << john.getBalance() << endl;
-
 	ifstream inFile;
-	inFile.open("./accounts.txt");
+	inFile.open("accounts.txt");
 
 	if (!inFile) {
 		cerr << "Unable to open file accounts.txt" << endl;
 		exit(1);
 	}
-/*
-	string line;
-	int number_of_lines;
-	while (std::getline(inFile, line))
-	        ++number_of_lines;
-	std::cout << "Number of lines in text file: " << number_of_lines;
-*/
 
 	string id;
 	double balance;
 	int count = 0;
 	while (inFile >> id) {
 		inFile >> balance;
-		cout << "id: " << id << endl;
-		cout << "balance: " << balance << endl;  
+		custList.push_back(Customer(id, balance));
+		count++;
+	}
 
-		custList[count].setID(id);
-		custList[count].setBalance(balance);
-		count ++;
+	inFile.close();
 
-	} 
+	int length = custList.size();
 
-	// custList[0].setID("TEST");
-	// custList[0].setBalance(100);
+/*************** Sequential Run *******************/
+	
+	cout << "Beginning clock for parallel calculations\n";
+	auto start = high_resolution_clock::now();
 
-	// Create Arraylist of customers
+	int thousandCount = 0;
 
-	// Create scanner file
+	for (int i = 0; i < length; i++) {
+		if (custList[i].getBalance() < 1000) {
+			++thousandCount;
+		}
+	}
 
-	// While infile.hasnext()
-		// Check java project for more info
+	auto stop = high_resolution_clock::now();
 
+	auto duration = duration_cast<milliseconds>(stop - start);
 
-	// Start clock (Check other cpp projects)
+	cout << "Number of accounts with less than $1000 is: " << thousandCount << endl;
+	cout << "Sequential program has finished with time of: " << duration.count() << " milliseconds" << endl;
 
+	
 
+/*************** Parallel Run *******************/
+	
+	cout << "Beginning clock for parallel calculations\n";
+	auto start2 = high_resolution_clock::now();
+	//	#pragma omp parallel
 
-	// End clock (check other cpp projects)
+    thousandCount = 0;
 
-	cout << "Program has finished with time of: " << time << endl;
+	omp_set_num_threads(4);
+	#pragma omp for reduction (+:thousandCount)
+	for (int i = 0; i < length; i++) {
+		if (custList[i].getBalance() < 1000) {
+			++thousandCount;
+		}
+	}
 
+	auto stop2 = high_resolution_clock::now();
 
+	auto duration2 = duration_cast<milliseconds>(stop2 - start2);
+	// auto duration = duration_cast<microseconds>(stop - start);
+
+	cout << "Number of accounts with less than $1000 is: " << thousandCount << endl;
+	cout << "Parallel program has finished with time of: " << duration2.count() << " milliseconds" << endl;
+	
 }
-
