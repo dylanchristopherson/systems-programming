@@ -4,6 +4,7 @@
 #include <chrono>
 #include <vector>
 #include <omp.h>
+#include <stdlib.h>
 
 using namespace std;
 using namespace std::chrono;
@@ -73,6 +74,7 @@ int main() {
 
 /*************** Sequential Run *******************/
 	
+	
 	cout << "Beginning clock for parallel calculations\n";
 	auto start = high_resolution_clock::now();
 
@@ -97,15 +99,16 @@ int main() {
 	
 	cout << "Beginning clock for parallel calculations\n";
 	auto start2 = high_resolution_clock::now();
-	//	#pragma omp parallel
+
 
     thousandCount = 0;
 
-	omp_set_num_threads(4);
+	// omp_set_num_threads(4);
+// #pragma omp parallel
 	#pragma omp for reduction (+:thousandCount)
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < custList.size(); i++) {
 		if (custList[i].getBalance() < 1000) {
-			++thousandCount;
+			thousandCount += 1;
 		}
 	}
 
